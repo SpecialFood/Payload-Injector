@@ -34,8 +34,8 @@ namespace bin2homebrew
 
                 Console.Write("Converting {0} to homebrew.js.\n", Path.GetFileName(arg));
 
-                //if (Convert.ToBoolean(argRemainingBits))
-                    //argDataTextList.Add(int.Parse(BitConverter.ToString(StringToByteArrayReversed(argText.Substring(argText.Length - argRemainingBits))).Replace("-", ""), System.Globalization.NumberStyles.HexNumber).ToString("X8"));
+                if (Convert.ToBoolean(argRemainingBits))
+                    argDataTextList.Add(BitConverter.ToString(StringToByteArrayReversed(argText.Substring(argText.Length - argRemainingBits))).Replace("-", ""));
 
                 foreach (string argDataTextListCell in argDataTextList)
                     homebrew += "\tp.write4(addr.add32(0x" + (counter++ * 4).ToString("X8").ToLowerInvariant() + "), 0x" + argDataTextListCell + ");\n";
