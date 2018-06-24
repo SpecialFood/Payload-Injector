@@ -28,9 +28,11 @@ namespace bin2homebrew
                     , argBytes = argText.Length / 8
                     , argRemainingBits = argText.Length % 8;
 
-                List<string> argDataTextList =
-                        Enumerable.Range(0, argBytes)
-                        .Select(i => BitConverter.ToString(StringToByteArrayReversed(argText.Substring(8 * i, 8))).Replace("-", "").ToLowerInvariant()).ToList();
+                List<string>
+                    homebrewDataTextList = new List<string>()
+                    , argDataTextList =
+                    Enumerable.Range(0, argBytes)
+                    .Select(i => BitConverter.ToString(StringToByteArrayReversed(argText.Substring(8 * i, 8))).Replace("-", "").ToLowerInvariant()).ToList();
 
                 Console.Write("Converting {0} to homebrew.js.\n", Path.GetFileName(arg));
 
@@ -38,9 +40,9 @@ namespace bin2homebrew
                     argDataTextList.Add(BitConverter.ToString(StringToByteArrayReversed(argText.Substring(argText.Length - argRemainingBits))).Replace("-", ""));
 
                 foreach (string argDataTextListCell in argDataTextList)
-                    homebrew += "\tp.write4(addr.add32(0x" + (counter++ * 4).ToString("X8").ToLowerInvariant() + "), 0x" + argDataTextListCell + ");\n";
+                    homebrewDataTextList.Add("\tp.write4(addr.add32(0x" + (counter++ * 4).ToString("x8") + "), 0x" + argDataTextListCell + ");");
 
-                homebrew += "}";
+                homebrew = "function writeHomebrewEN(p, addr) {\n" + string.Join("\n", homebrewDataTextList) + "\n}";
 
                 string homebrewFile =
                     Path.GetDirectoryName(arg)
