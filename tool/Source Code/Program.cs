@@ -20,7 +20,7 @@ namespace bin2homebrew
             {
                 byte[] argData = File.ReadAllBytes(arg);
                 string
-                    homebrew = "function writeHomebrewEN(p, addr) {\n"
+                    homebrew
                     , argText = BitConverter.ToString(argData).Replace("-", "");
 
                 int
